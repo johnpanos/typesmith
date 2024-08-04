@@ -1,0 +1,40 @@
+name: Ruby Gem Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby:
+          - '3.2.2'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rake test
+        continue-on-error: true
+        id: run_tests
+      - name: Report test results
+        if: always()
+        run: |
+          if ${{ steps.run_tests.outcome == 'success' }}; then
+            echo "Tests passed successfully!"
+            exit 0
+          else
+            echo "Tests failed. Please check the logs for details."
+            exit 1
+          fi
