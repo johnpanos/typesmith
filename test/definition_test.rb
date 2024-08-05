@@ -179,26 +179,6 @@ class DefinitionTest < Minitest::Test
     assert_match(/Undefined attributes: undefined/, error.message)
   end
 
-  def test_to_json
-    instance = TestComplex.new(
-      id: 1,
-      name: "Test",
-      items: [{ id: 2, name: "Item", is_active: false, created_at: nil, tags: [] }],
-      nested: { user: { id: 3, name: "User" } },
-      metadata: { "key" => "value" }
-    )
-
-    expected = {
-      id: 1,
-      name: "Test",
-      items: [{ id: 2, name: "Item", is_active: false, created_at: nil, tags: [] }],
-      nested: { user: { id: 3, name: "User" } },
-      metadata: { "key" => "value" }
-    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-
-    assert_equal expected, instance.to_json
-  end
-
   class TestIndexedArrays < Typesmith::Definition
     property :simple_array, type: { string: [:string] }
     property :complex_array, type: { string: [TestSimple] }

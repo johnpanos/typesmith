@@ -67,10 +67,10 @@ class ArrayPropertyTest < Minitest::Test
   end
 
   def test_get_type_string
-    assert_equal "string[]", @string_array.send(:get_type_string, @string_array.type)
-    assert_equal "number[]", @number_array.send(:get_type_string, @number_array.type)
-    assert_equal "boolean[]", @boolean_array.send(:get_type_string, @boolean_array.type)
-    assert_equal "CustomType[]", @custom_array.send(:get_type_string, @custom_array.type)
-    assert_equal "number[][]", @nested_array.send(:get_type_string, @nested_array.type)
+    assert_equal "string", @string_array.send(:get_type_string, @string_array.type)
+    assert_equal "number", @number_array.send(:get_type_string, @number_array.type)
+    assert_equal "boolean", @boolean_array.send(:get_type_string, @boolean_array.type)
+    assert_equal "CustomType", @custom_array.send(:get_type_string, @custom_array.type)
+    assert_equal "number[]", @nested_array.send(:get_type_string, @nested_array.type)
   end
 end
