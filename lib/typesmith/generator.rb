@@ -13,6 +13,8 @@ module Typesmith
     def generate_all(base_path:)
       @base_path = base_path
 
+      FileUtils.rm_rf(@base_path)
+
       definition_classes = ObjectSpace.each_object(Class).select { |klass| klass < Definition }.filter(&:name)
       generated_files = definition_classes.map { |klass| generate_typescript_file(klass) }
       generate_index_files(generated_files)
