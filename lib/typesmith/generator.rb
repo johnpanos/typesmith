@@ -6,25 +6,25 @@ require "active_support/core_ext/string/inflections"
 
 module Typesmith
   class Generator
-    BASE_OUTPUT_DIR = File.join("app", "javascript", "types", "__generated__")
-
-    def self.generate_all
-      new.generate_all
+    def self.generate_all(base_path: File.join("app", "javascript", "types", "__generated__"))
+      new.generate_all(base_path: base_path)
     end
 
-    def generate_all
+    def generate_all(base_path:)
+      @base_path = base_path
+
       definition_classes = ObjectSpace.each_object(Class).select { |klass| klass < Definition }.filter(&:name)
       generated_files = definition_classes.map { |klass| generate_typescript_file(klass) }
       generate_index_files(generated_files)
 
-      puts "TypeScript types and index files have been generated in the '#{BASE_OUTPUT_DIR}' directory"
+      puts "TypeScript types and index files have been generated in the '#{@base_path}' directory"
     end
 
     private
 
     def generate_typescript_file(klass)
       module_path = klass.name.underscore
-      directory = File.join(BASE_OUTPUT_DIR, File.dirname(module_path))
+      directory = File.join(@base_path, File.dirname(module_path))
       FileUtils.mkdir_p(directory)
 
       file_name = "#{File.basename(module_path)}.ts"

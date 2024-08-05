@@ -40,11 +40,9 @@ class TestArray < Typesmith::Definition
   property :items, type: [TestSimple]
 end
 
-class GeneratorTest < Minitest::Test
+class Typesmith::GeneratorTest < Minitest::Test
   def setup
-    @generator = Typesmith::Generator.new
     @test_output_dir = File.join("test", "tmp", "generated")
-    Typesmith::Generator.const_set(:BASE_OUTPUT_DIR, @test_output_dir)
     FileUtils.rm_rf(@test_output_dir)
     FileUtils.mkdir_p(@test_output_dir)
   end
@@ -54,7 +52,7 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_generate_all
-    @generator.generate_all
+    Typesmith::Generator.generate_all(base_path: @test_output_dir)
 
     assert File.exist?(File.join(@test_output_dir, "test_simple.ts"))
     assert File.exist?(File.join(@test_output_dir, "test_nested.ts"))
@@ -77,7 +75,7 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_generate_imports
-    @generator.generate_all
+    Typesmith::Generator.generate_all(base_path: @test_output_dir)
 
     import_content = File.read(File.join(@test_output_dir, "test_import.ts"))
     assert_match(%r{import { TestSimple } from './test_simple';}, import_content)
@@ -88,7 +86,7 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_generate_complex_nesting
-    @generator.generate_all
+    Typesmith::Generator.generate_all(base_path: @test_output_dir)
 
     complex_content = File.read(File.join(@test_output_dir, "test_complex_nesting.ts"))
     assert_match(/export interface TestComplexNesting/, complex_content)
@@ -100,7 +98,7 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_generate_indexed_properties
-    @generator.generate_all
+    Typesmith::Generator.generate_all(base_path: @test_output_dir)
 
     indexed_content = File.read(File.join(@test_output_dir, "test_indexed.ts"))
     assert_match(/export interface TestIndexed/, indexed_content)
@@ -108,7 +106,7 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_generate_array_properties
-    @generator.generate_all
+    Typesmith::Generator.generate_all(base_path: @test_output_dir)
 
     array_content = File.read(File.join(@test_output_dir, "test_array.ts"))
     assert_match(%r{import { TestSimple } from './test_simple';}, array_content)
