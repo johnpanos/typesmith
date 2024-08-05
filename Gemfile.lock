@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    typesmith (0.2.0)
+    typesmith (0.3.0)
 
 GEM
   remote: https://rubygems.org/
